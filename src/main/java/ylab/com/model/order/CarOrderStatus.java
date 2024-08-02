@@ -1,4 +1,4 @@
-package ylab.com.model;
+package ylab.com.model.order;
 
 public enum CarOrderStatus {
     CREATED,

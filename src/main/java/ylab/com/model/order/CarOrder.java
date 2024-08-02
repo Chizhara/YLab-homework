@@ -1,15 +1,18 @@
-package ylab.com.model;
+package ylab.com.model.order;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import ylab.com.model.car.Car;
+import ylab.com.model.user.User;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Data
+@Builder
 public class CarOrder {
     private UUID id;
     private User customer;

@@ -1,14 +1,17 @@
 package ylab.com.repository.impl;
 
-import ylab.com.model.Car;
-import ylab.com.model.CarOrder;
-import ylab.com.model.CarOrderStatus;
-import ylab.com.model.User;
+import ylab.com.model.car.Car;
+import ylab.com.model.order.CarOrder;
+import ylab.com.model.order.CarOrderSearchParams;
+import ylab.com.model.order.CarOrderStatus;
+import ylab.com.model.user.User;
 import ylab.com.repository.CarOrderRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class InMemoryCarOrderRepository extends InMemoryRepository<UUID, CarOrder> implements CarOrderRepository {
     @Override
@@ -24,40 +27,46 @@ public class InMemoryCarOrderRepository extends InMemoryRepository<UUID, CarOrde
     }
 
     @Override
-    public List<CarOrder> findByCustomer(User customer) {
+    public List<CarOrder> findOrdersByParams(CarOrderSearchParams params) {
+        Stream<CarOrder> orders = super.getAll().stream();
+        if (params.getCustomer() != null) {
+            orders = filterByCustomer(params.getCustomer(), orders);
+        }
+        if (params.getCar() != null) {
+            orders = filterByCar(params.getCar(), orders);
+        }
+        if (params.getStatus() != null) {
+            orders = filterByStatus(params.getStatus(), orders);
+        }
+        if (params.getOrderDate() != null) {
+            orders = filterByOrderDate(params.getOrderDate(), orders);
+        }
+        return orders.toList();
+    }
+
+    public Stream<CarOrder> filterByCustomer(User customer, Stream<CarOrder> orders) {
         UUID customerId = customer.getId();
-        return storage.values().stream()
+        return orders
             .filter(order ->
-                order.getCustomer().getId().equals(customerId))
-            .toList();
+                order.getCustomer().getId().equals(customerId));
     }
 
-    @Override
-    public List<CarOrder> findByCar(Car car) {
+    public Stream<CarOrder> filterByCar(Car car, Stream<CarOrder> orders) {
         UUID carId = car.getId();
-        return storage.values().stream()
+        return orders
             .filter(order ->
-                order.getCar().getId().equals(carId))
-            .toList();
+                order.getCar().getId().equals(carId));
     }
 
-    @Override
-    public List<CarOrder> findByCustomerAndStatus(User user, CarOrderStatus orderStatus) {
-        UUID customerId = user.getId();
-        return storage.values().stream()
+    public Stream<CarOrder> filterByStatus(CarOrderStatus orderStatus, Stream<CarOrder> orders) {
+        return orders
             .filter(order ->
-                order.getCustomer().getId().equals(customerId) &&
-                    order.getCarOrderStatus().equals(orderStatus))
-            .toList();
+                order.getCarOrderStatus().equals(orderStatus));
     }
 
-    @Override
-    public List<CarOrder> findByCarAndStatus(Car car, CarOrderStatus orderStatus) {
-        UUID carId = car.getId();
-        return storage.values().stream()
+    public Stream<CarOrder> filterByOrderDate(Instant orderDate, Stream<CarOrder> orders) {
+        return orders
             .filter(order ->
-                order.getCar().getId().equals(carId) &&
-                    order.getCarOrderStatus().equals(orderStatus))
-            .toList();
+                order.getDate().equals(orderDate));
     }
 }

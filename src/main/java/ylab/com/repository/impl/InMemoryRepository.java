@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public abstract class InMemoryRepository<K extends Comparable, T> {
     protected final TreeMap<K, T> storage;
