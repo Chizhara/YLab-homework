@@ -1,6 +1,7 @@
 package ylab.com.service;
 
 import lombok.RequiredArgsConstructor;
+import ylab.com.exception.InvalidActionException;
 import ylab.com.exception.NotFoundException;
 import ylab.com.mapper.CarMapperImpl;
 import ylab.com.model.car.Car;
@@ -24,8 +25,7 @@ public class CarOrderService {
     private final UserService userService;
     private final CarService carService;
 
-    public CarOrder addOrder(CarOrderCreateRequest request) {
-        User customer = userService.getUser(request.getCustomerId());
+    public CarOrder addOrder(User customer, CarOrderCreateRequest request) {
         Car car = carService.getCar(request.getCarId());
         CarOrder order = createOrder(customer, car);
         return carOrderRepository.save(order);
@@ -34,10 +34,10 @@ public class CarOrderService {
     public List<CarOrder> findOrders(CarOrderSearchRequest request) {
         User customer = null;
         Car car = null;
-        if(request.getCarId() != null) {
+        if (request.getCarId() != null) {
             car = carService.getCar(request.getCarId());
         }
-        if(request.getCustomerId() != null) {
+        if (request.getCustomerId() != null) {
             customer = userService.getUser(request.getCustomerId());
         }
         CarOrderSearchParams orderSearchParams = carMapper.carToCarOrderSearchParams(request, customer, car);
@@ -54,13 +54,13 @@ public class CarOrderService {
         CarOrderStatus status = order.getCarOrderStatus();
         CarOrderStatus newStatus = request.getCarOrderStatus();
         if (status == newStatus) {
-            throw new IllegalArgumentException("Статус должен отличаться от существующего");
+            throw new InvalidActionException("Статус должен отличаться от существующего");
         }
         if (status == CarOrderStatus.CANCELED) {
-            throw new IllegalArgumentException("Нельзя изменить статус отмененной заявки");
+            throw new InvalidActionException("Нельзя изменить статус отмененной заявки");
         }
         if (status == CarOrderStatus.CLOSED) {
-            throw new IllegalArgumentException("Нельзя изменить статус закрытой заявки");
+            throw new InvalidActionException("Нельзя изменить статус закрытой заявки");
         }
 
         order.setCarOrderStatus(newStatus);

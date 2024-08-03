@@ -20,14 +20,14 @@ public class AuthService {
         return login(credentials);
     }
 
-    public Credentials toCredentials(Map<String, String> rawCredentials) {
+    private Credentials toCredentials(Map<String, String> rawCredentials) {
         return Credentials.builder()
             .login(rawCredentials.get("login"))
             .password(rawCredentials.get("password"))
             .build();
     }
 
-    public User login(Credentials credentials) {
+    private User login(Credentials credentials) {
         Optional<User> userOpt = userRepository.findByLogin(credentials.getLogin());
         User user;
         if (userOpt.isEmpty()) {

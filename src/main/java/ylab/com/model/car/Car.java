@@ -1,6 +1,7 @@
 package ylab.com.model.car;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Builder
 public class Car {
     private UUID id;

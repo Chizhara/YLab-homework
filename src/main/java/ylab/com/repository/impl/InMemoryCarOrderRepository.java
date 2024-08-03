@@ -27,6 +27,14 @@ public class InMemoryCarOrderRepository extends InMemoryRepository<UUID, CarOrde
     }
 
     @Override
+    public boolean containsByCarAndStatuses(Car car, List<CarOrderStatus> orderStatuses) {
+        return super.getAll().stream()
+            .anyMatch(order ->
+                car.getId().equals(order.getCar().getId())
+                    && orderStatuses.contains(order.getCarOrderStatus()));
+    }
+
+    @Override
     public List<CarOrder> findOrdersByParams(CarOrderSearchParams params) {
         Stream<CarOrder> orders = super.getAll().stream();
         if (params.getCustomer() != null) {
@@ -58,10 +66,10 @@ public class InMemoryCarOrderRepository extends InMemoryRepository<UUID, CarOrde
                 order.getCar().getId().equals(carId));
     }
 
-    public Stream<CarOrder> filterByStatus(CarOrderStatus orderStatus, Stream<CarOrder> orders) {
+    public Stream<CarOrder> filterByStatus(List<CarOrderStatus> orderStatus, Stream<CarOrder> orders) {
         return orders
             .filter(order ->
-                order.getCarOrderStatus().equals(orderStatus));
+                orderStatus.contains(order.getCarOrderStatus()));
     }
 
     public Stream<CarOrder> filterByOrderDate(Instant orderDate, Stream<CarOrder> orders) {

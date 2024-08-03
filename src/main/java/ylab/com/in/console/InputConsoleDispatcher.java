@@ -16,12 +16,10 @@ public class InputConsoleDispatcher {
     }
 
     private void initProcessors(Collection<InputConsoleController> controllers) {
-        controllers.forEach(controller -> {
-            this.controllers.put(controller.getBasePath(), controller);
-        });
+        controllers.forEach(controller -> this.controllers.put(controller.getBasePath(), controller));
     }
 
-    public ConsoleResponse<?> dispatchProcess(ConsoleRequest request) {
+    public ConsoleResponse<?> dispatch(ConsoleRequest request) {
         String path = request.getHandlerKey().getPath();
         while (true) {
             if (controllers.containsKey(path)) {

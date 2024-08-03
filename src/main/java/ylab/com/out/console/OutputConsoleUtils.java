@@ -6,7 +6,7 @@ public class OutputConsoleUtils {
     public void printMethods() {
         System.out.println("Выберите один из следующих методов");
         for (int i = 0; i < Method.values().length; i++) {
-            System.out.println(("[" + i + 1 + "]" + ". " + Method.values()[i]));
+            System.out.println(("[" + (i + 1) + "]" + ". " + Method.values()[i]));
         }
     }
 

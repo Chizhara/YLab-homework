@@ -1,14 +1,12 @@
 package ylab.com.repository.impl;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
-public abstract class InMemoryRepository<K extends Comparable, T> {
+public abstract class InMemoryRepository<K extends Comparable<? extends K>, T> {
     protected final TreeMap<K, T> storage;
-    protected long index;
+
     public InMemoryRepository() {
         storage = new TreeMap<>();
     }
@@ -17,7 +15,7 @@ public abstract class InMemoryRepository<K extends Comparable, T> {
         return Optional.ofNullable(storage.get(key));
     }
 
-    protected T save(K key,T o) {
+    protected T save(K key, T o) {
         storage.put(key, o);
         return o;
     }

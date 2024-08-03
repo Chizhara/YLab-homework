@@ -43,7 +43,7 @@ public class CarConsoleController extends AbsInputConsoleController {
         } else if (BASE_PATH.equals(handlerKey.getPath()) && handlerKey.getMethod().equals(Method.GET)) {
             return getCars(request);
         } else if (handlerKey.getPath().contains((BASE_PATH + "/")) && handlerKey.getMethod().equals(Method.GET)) {
-            return updateCar(request);
+            return getCar(request);
         } else if (handlerKey.getPath().contains((BASE_PATH + "/")) && handlerKey.getMethod().equals(Method.PATCH)) {
             return updateCar(request);
         } else if (handlerKey.getPath().contains((BASE_PATH + "/")) && handlerKey.getMethod().equals(Method.DELETE)) {
@@ -94,7 +94,7 @@ public class CarConsoleController extends AbsInputConsoleController {
             throw new InvalidActionException("У вас недостаточно прав для совершения действия");
         }
 
-        Car car = carService.carRepository.deleteById(id);
+        Car car = carService.removeCar(id);
         return new ConsoleResponse<>(car);
     }
 }

@@ -37,16 +37,13 @@ public class UserService {
         return userRepository.findAllByParams(userSearchParams);
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
-
     public User addUser(UserCreateRequest request) {
         validateLogin(request.getLogin());
         validateEmail(request.getEmail());
         validatePhone(request.getPhone());
         User user = userMapper.toUser(request);
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        return user;
     }
 
     public User updateUser(User requester, UserUpdateRequest request, UUID userId) {

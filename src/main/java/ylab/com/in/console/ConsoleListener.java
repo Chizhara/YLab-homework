@@ -47,8 +47,13 @@ public class ConsoleListener {
                 Map<String, String> rawObject = getRawObject();
                 Map<String, String> headers = getHeaders();
 
-                System.out.println(inputConsoleDispatcher
-                    .dispatchProcess(new ConsoleRequest(handlerKey, rawObject, headers)));
+                try {
+                    System.out.println(inputConsoleDispatcher
+                        .dispatch(new ConsoleRequest(handlerKey, rawObject, headers)));
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
             } catch (RuntimeException e) {
                 System.out.println("Произошла непредвиденная ошибка!" + e.getMessage());
             }
