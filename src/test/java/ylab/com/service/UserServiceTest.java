@@ -40,7 +40,7 @@ public class UserServiceTest {
     public static User initUser(UserRole role) {
         userIndex++;
         return User.builder()
-            .email("num_ " + userIndex + " +@gmail.com")
+            .email("num_" + userIndex + "@gmail.com")
             .login("user_num_" + userIndex)
             .password("password_" + userIndex)
             .phone("899988877" + userIndex + userIndex)
@@ -89,6 +89,24 @@ public class UserServiceTest {
         assertEquals(user.getPhone(), userRes.getPhone());
         assertEquals(user.getEmail(), userRes.getEmail());
         assertEquals(user.getRole(), userRes.getRole());
+    }
+
+    @Test
+    public void testUpdateManager() {
+        User user = initUser(UserRole.MANAGER);
+        user.setId(UUID.randomUUID());
+        UserUpdateRequest request = UserUpdateRequest.builder()
+            .login(user.getLogin())
+            .password(user.getPassword())
+            .phone(user.getPhone())
+            .email(user.getEmail())
+            .build();
+
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+        Mockito.when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        User userRes = userService.updateEmployer(request, user.getId());
+
+        assertEquals(user.getId(), userRes.getId());
     }
 
     @Test

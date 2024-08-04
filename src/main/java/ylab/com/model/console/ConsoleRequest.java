@@ -1,11 +1,14 @@
 package ylab.com.model.console;
 
-import lombok.Value;
-import ylab.com.model.security.Credentials;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.Map;
 
-@Value
+@Data
+@AllArgsConstructor
+@Builder
 public class ConsoleRequest {
     HandlerKey handlerKey;
     Map<String, String> rawObject;

@@ -8,7 +8,7 @@ public class PathVariableExtractor {
     }
 
     public static UUID extractUUID(String path, Integer index) {
-        path = path.substring(index + 1);
+        path = path.substring(index);
         int tempIndex = !path.contains("/") ? path.length() : path.indexOf("/");
         String res = path.substring(0, tempIndex);
         return UUID.fromString(res);

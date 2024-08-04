@@ -46,6 +46,16 @@ public class UserService {
         return user;
     }
 
+    public User updateEmployer(UserUpdateRequest request, UUID employerId) {
+        validateUpdateRequestCollisions(request);
+        User searchedUser = getUser(employerId);
+        if(searchedUser.getRole() == UserRole.USER) {
+            throw new InvalidActionException("Нельзя обновлять информацию об обычном пользователе");
+        }
+        userMapper.toUser(searchedUser, request);
+        return userRepository.save(searchedUser);
+    }
+
     public User updateUser(User requester, UserUpdateRequest request, UUID userId) {
         UUID requesterId = requester.getId();
         validateUpdateRequest(requesterId, request, userId);
@@ -58,6 +68,10 @@ public class UserService {
         if (requesterId != userId) {
             throw new InvalidActionException("Нельзя обновлять информацию о другом пользователе");
         }
+        validateUpdateRequestCollisions(request);
+    }
+
+    private void validateUpdateRequestCollisions(UserUpdateRequest request) {
         if (request.getLogin() != null) {
             validateLogin(request.getLogin());
         }

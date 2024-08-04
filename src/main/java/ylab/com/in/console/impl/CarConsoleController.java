@@ -12,10 +12,12 @@ import ylab.com.model.console.ConsoleRequest;
 import ylab.com.model.console.ConsoleResponse;
 import ylab.com.model.console.HandlerKey;
 import ylab.com.model.console.Method;
+import ylab.com.model.log.LogEventType;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserRole;
 import ylab.com.service.AuthService;
 import ylab.com.service.CarService;
+import ylab.com.service.LogService;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,13 +28,16 @@ public class CarConsoleController extends AbsInputConsoleController {
     private final CarService carService;
     private final CarMapperImpl carMapper;
     private final AuthService authService;
+    private final LogService logService;
 
     public CarConsoleController(CarService carService,
-                                CarMapperImpl carMapper, AuthService authService) {
+                                CarMapperImpl carMapper,
+                                AuthService authService, LogService logService) {
         super(BASE_PATH);
         this.carService = carService;
         this.carMapper = carMapper;
         this.authService = authService;
+        this.logService = logService;
     }
 
     @Override
@@ -60,6 +65,7 @@ public class CarConsoleController extends AbsInputConsoleController {
         }
 
         Car car = carService.addCar(createRequest);
+        logService.save(user, car, LogEventType.POST, request);
         return new ConsoleResponse<>(car);
     }
 
@@ -72,6 +78,7 @@ public class CarConsoleController extends AbsInputConsoleController {
         }
 
         Car car = carService.updateCar(id, updateRequest);
+        logService.save(user, car, LogEventType.UPDATE, request);
         return new ConsoleResponse<>(car);
     }
 
@@ -95,6 +102,7 @@ public class CarConsoleController extends AbsInputConsoleController {
         }
 
         Car car = carService.removeCar(id);
+        logService.save(user, car, LogEventType.DELETE, request);
         return new ConsoleResponse<>(car);
     }
 }

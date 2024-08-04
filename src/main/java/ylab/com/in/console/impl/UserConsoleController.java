@@ -8,12 +8,14 @@ import ylab.com.model.console.ConsoleRequest;
 import ylab.com.model.console.ConsoleResponse;
 import ylab.com.model.console.HandlerKey;
 import ylab.com.model.console.Method;
+import ylab.com.model.log.LogEventType;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserCreateRequest;
 import ylab.com.model.user.UserRole;
 import ylab.com.model.user.UserSearchRequest;
 import ylab.com.model.user.UserUpdateRequest;
 import ylab.com.service.AuthService;
+import ylab.com.service.LogService;
 import ylab.com.service.UserService;
 
 import java.util.List;
@@ -25,12 +27,17 @@ public class UserConsoleController extends AbsInputConsoleController {
     private final UserService userService;
     private final UserMapperImpl userMapper;
     private final AuthService authService;
+    private final LogService logService;
 
-    public UserConsoleController(AuthService authService, UserService userService, UserMapperImpl userMapper) {
+    public UserConsoleController(AuthService authService,
+                                 UserService userService,
+                                 UserMapperImpl userMapper,
+                                 LogService logService) {
         super(BASE_PATH);
         this.userService = userService;
         this.userMapper = userMapper;
         this.authService = authService;
+        this.logService = logService;
     }
 
 
@@ -59,6 +66,7 @@ public class UserConsoleController extends AbsInputConsoleController {
         UserUpdateRequest userUpdateRequest = userMapper.toUserUpdateRequest(request.getRawObject());
         User requester = authService.getUser(request);
         User user = userService.updateUser(requester, userUpdateRequest, id);
+        logService.save(user, user, LogEventType.UPDATE, request);
         return new ConsoleResponse<>(user);
     }
 
