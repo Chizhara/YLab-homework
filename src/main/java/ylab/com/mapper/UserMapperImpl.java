@@ -2,6 +2,7 @@ package ylab.com.mapper;
 
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserCreateRequest;
+import ylab.com.model.user.UserOrderType;
 import ylab.com.model.user.UserRole;
 import ylab.com.model.user.UserSearchParams;
 import ylab.com.model.user.UserSearchRequest;
@@ -62,6 +63,8 @@ public class UserMapperImpl {
             .email(userSearchRequest.getEmail())
             .phone(userSearchRequest.getPhone())
             .login(userSearchRequest.getLogin())
+            .orderType(userSearchRequest.getOrderType())
+            .desc(userSearchRequest.getDesc())
             .build();
     }
 
@@ -71,6 +74,8 @@ public class UserMapperImpl {
             .email(rawBody.get("email"))
             .login(rawBody.get("login"))
             .phone(rawBody.get("phone"))
+            .orderType(UserOrderType.valueOf(rawBody.getOrDefault("orderType", "NONE")))
+            .desc(Boolean.parseBoolean(rawBody.getOrDefault("desc", "false")))
             .build();
     }
 }

@@ -13,4 +13,5 @@ public class UserSearchRequest {
     private String email;
     private String login;
     private UserOrderType orderType;
+    private Boolean desc;
 }

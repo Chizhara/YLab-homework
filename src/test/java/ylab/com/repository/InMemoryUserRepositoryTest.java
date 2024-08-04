@@ -3,6 +3,7 @@ package ylab.com.repository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ylab.com.model.user.User;
+import ylab.com.model.user.UserOrderType;
 import ylab.com.model.user.UserRole;
 import ylab.com.model.user.UserSearchParams;
 import ylab.com.repository.impl.InMemoryUserRepository;
@@ -93,6 +94,8 @@ public class InMemoryUserRepositoryTest {
             .email(user.getEmail())
             .phone(user.getPhone())
             .roles(List.of(user.getRole()))
+            .orderType(UserOrderType.LOGIN)
+            .desc(false)
             .build();
 
         List<User> usersRes = userRepository.findAllByParams(params);

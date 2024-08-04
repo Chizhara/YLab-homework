@@ -4,6 +4,7 @@ import ylab.com.model.user.User;
 import ylab.com.model.user.UserSearchParams;
 import ylab.com.repository.UserRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,6 +57,11 @@ public class InMemoryUserRepository extends InMemoryRepository<UUID, User> imple
         }
         if (params.getRoles() != null && !params.getRoles().isEmpty()) {
             stream = stream.filter(user -> params.getRoles().contains(user.getRole()));
+        }
+
+        switch (params.getOrderType()) {
+            case ROLE -> stream = stream.sorted(Comparator.comparing(User::getRole));
+            case LOGIN -> stream = stream.sorted(Comparator.comparing(User::getLogin));
         }
         return stream.toList();
     }

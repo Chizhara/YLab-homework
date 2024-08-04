@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ylab.com.model.Entity;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @Builder
+@ToString
 public class User implements Entity {
     private UUID id;
     private UserRole role;

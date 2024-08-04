@@ -12,4 +12,6 @@ public class UserSearchParams {
     private String phone;
     private String email;
     private String login;
+    private UserOrderType orderType;
+    private Boolean desc;
 }
