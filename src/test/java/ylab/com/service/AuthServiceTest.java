@@ -1,6 +1,7 @@
 package ylab.com.service;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ylab.com.model.console.ConsoleRequest;
@@ -25,13 +26,9 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void testLogin() {
+    @DisplayName("Авторизация пользователя при верных параметрах")
+    public void test_shouldReturnUser_whenValidCredentials() {
         User user = UserServiceTest.initUser(UserRole.USER);
-
-        Credentials credentials = Credentials.builder()
-            .login(user.getLogin())
-            .password(user.getPassword())
-            .build();
 
         ConsoleRequest consoleRequest = new ConsoleRequest(null, null,
             Map.of("login", user.getLogin(),

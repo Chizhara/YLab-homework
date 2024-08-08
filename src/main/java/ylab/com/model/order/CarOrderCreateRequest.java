@@ -8,5 +8,5 @@ import java.util.UUID;
 @Data
 @Builder
 public class CarOrderCreateRequest {
-    private UUID carId;
+    private Long carId;
 }

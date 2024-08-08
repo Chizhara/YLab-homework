@@ -44,6 +44,7 @@ public class CarServiceTest {
     public static Car initCar(CarStatus carStatus) {
         carIndex++;
         return Car.builder()
+            .id((long) carIndex)
             .brand("brand_" + carIndex)
             .model("model_" + carIndex)
             .price(1000 + carIndex)
@@ -55,6 +56,7 @@ public class CarServiceTest {
     @Test
     public void testAddCar() {
         Car car = initCar(CarStatus.NEW);
+        car.setId(null);
 
         CarCreateRequest request = CarCreateRequest.builder()
             .brand(car.getBrand())
@@ -78,22 +80,21 @@ public class CarServiceTest {
     public void testUpdateCar() {
         Car car = initCar(CarStatus.NEW);
 
-        UUID id = UUID.randomUUID();
-        car.setId(id);
+        //car.setId(id);
 
         CarUpdateRequest request = CarUpdateRequest.builder()
             .price(car.getPrice() + 1)
             .status(CarStatus.MODIFIED)
             .build();
 
-        Mockito.when(carRepository.findById(id)).thenReturn(Optional.of(car));
+        Mockito.when(carRepository.findById(car.getId())).thenReturn(Optional.of(car));
 
         car.setStatus(request.getStatus());
         car.setPrice(request.getPrice());
 
         List<CarOrderStatus> excludedStatuses = List.of(CarOrderStatus.CREATED, CarOrderStatus.CLOSED);
 
-        Mockito.when(carOrderRepository.containsByCarAndStatuses(car, excludedStatuses)).thenReturn(false);
+        Mockito.when(carOrderRepository.containsByCarAndStatuses(car.getId(), excludedStatuses)).thenReturn(false);
         Mockito.when(carRepository.save(car)).thenReturn(car);
 
         Car carRes = carService.updateCar(car.getId(), request);
@@ -110,24 +111,20 @@ public class CarServiceTest {
     public void testRemoveCar() {
         Car car = initCar(CarStatus.NEW);
 
-        UUID id = UUID.randomUUID();
-        car.setId(id);
-
         CarUpdateRequest request = CarUpdateRequest.builder()
             .price(car.getPrice() + 1)
             .status(CarStatus.MODIFIED)
             .build();
 
 
-        Mockito.when(carRepository.findById(id)).thenReturn(Optional.of(car));
+        Mockito.when(carRepository.findById(car.getId())).thenReturn(Optional.of(car));
 
         car.setStatus(request.getStatus());
         car.setPrice(request.getPrice());
 
         List<CarOrderStatus> excludedStatuses = List.of(CarOrderStatus.CREATED, CarOrderStatus.CLOSED);
 
-        Mockito.when(carOrderRepository.containsByCarAndStatuses(car, excludedStatuses)).thenReturn(false);
-        Mockito.when(carRepository.deleteById(car.getId())).thenReturn(car);
+        Mockito.when(carOrderRepository.containsByCarAndStatuses(car.getId(), excludedStatuses)).thenReturn(false);
 
         Car carRes = carService.removeCar(car.getId());
 
@@ -139,7 +136,7 @@ public class CarServiceTest {
         Car car = initCar(CarStatus.NEW);
 
         UUID id = UUID.randomUUID();
-        car.setId(id);
+        //car.setId(id);
 
         CarSearchRequest request = CarSearchRequest.builder()
             .status(car.getStatus())
@@ -155,7 +152,7 @@ public class CarServiceTest {
         CarSearchParams searchParams = carMapper.toCarSearchParams(request);
 
         Mockito.when(carOrderRepository.containsByCarAndStatuses(
-                car,
+                car.getId(),
                 List.of(CarOrderStatus.CREATED, CarOrderStatus.CLOSED)))
             .thenReturn(false);
 
@@ -174,23 +171,20 @@ public class CarServiceTest {
     public void testUpdateNotAvailableCar() {
         Car car = initCar(CarStatus.NEW);
 
-        UUID id = UUID.randomUUID();
-        car.setId(id);
-
         CarUpdateRequest request = CarUpdateRequest.builder()
             .price(car.getPrice() + 1)
             .status(CarStatus.MODIFIED)
             .build();
 
 
-        Mockito.when(carRepository.findById(id)).thenReturn(Optional.of(car));
+        Mockito.when(carRepository.findById(car.getId())).thenReturn(Optional.of(car));
 
         car.setStatus(request.getStatus());
         car.setPrice(request.getPrice());
 
         List<CarOrderStatus> excludedStatuses = List.of(CarOrderStatus.CREATED, CarOrderStatus.CLOSED);
 
-        Mockito.when(carOrderRepository.containsByCarAndStatuses(car, excludedStatuses)).thenReturn(true);
+        Mockito.when(carOrderRepository.containsByCarAndStatuses(car.getId(), excludedStatuses)).thenReturn(true);
 
         assertThrows(InvalidActionException.class, () -> carService.removeCar(car.getId()));
     }

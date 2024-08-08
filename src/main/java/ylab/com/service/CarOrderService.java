@@ -44,12 +44,12 @@ public class CarOrderService {
         return carOrderRepository.findOrdersByParams(orderSearchParams);
     }
 
-    public CarOrder getOrder(UUID id) {
+    public CarOrder getOrder(Long id) {
         return carOrderRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(CarOrder.class, id));
     }
 
-    public CarOrder updateOrder(UUID orderId, CarOrderUpdateRequest request) {
+    public CarOrder updateOrder(Long orderId, CarOrderUpdateRequest request) {
         CarOrder order = getOrder(orderId);
         CarOrderStatus status = order.getCarOrderStatus();
         CarOrderStatus newStatus = request.getCarOrderStatus();

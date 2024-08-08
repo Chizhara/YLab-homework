@@ -1,4 +1,4 @@
-package ylab.com.model.user;
+package ylab.com.model.user.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -63,7 +63,7 @@ public class CarOrderConsoleController extends AbsInputConsoleController {
     }
 
     private ConsoleResponse<CarOrder> updateOrder(ConsoleRequest request) {
-        UUID id = PathVariableExtractor.extractUUID(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
+        Long id = PathVariableExtractor.extractLong(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
         CarOrderUpdateRequest updateRequest = carMapper.toCarOrderUpdateRequest(request.getRawObject());
         User user = authService.getUser(request);
         if (user.getRole() != UserRole.MANAGER && user.getRole() != UserRole.ADMIN) {

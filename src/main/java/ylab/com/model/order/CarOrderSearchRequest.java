@@ -10,8 +10,8 @@ import java.util.UUID;
 @Data
 @Builder
 public class CarOrderSearchRequest {
-    private UUID carId;
-    private UUID customerId;
+    private Long carId;
+    private Long customerId;
     private Instant orderDate;
     private List<CarOrderStatus> status;
 }

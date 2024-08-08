@@ -54,11 +54,11 @@ public class CarOrderConsoleControllerTest {
     @Test
     public void testAddOrder() {
         User user = UserServiceTest.initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
         CarOrder order = CarOrderServiceTest.initCarOrder(car, user);
-        order.setId(UUID.randomUUID());
+        //order.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "car", car.getId().toString()
@@ -89,11 +89,11 @@ public class CarOrderConsoleControllerTest {
     @Test
     public void testSearchOrders() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
         CarOrder order = CarOrderServiceTest.initCarOrder(car, user);
-        order.setId(UUID.randomUUID());
+        //order.setId(UUID.randomUUID());
         order.setCarOrderStatus(CarOrderStatus.CLOSED);
 
         Map<String, String> rawBody = Map.of(
@@ -130,11 +130,8 @@ public class CarOrderConsoleControllerTest {
     @Test
     public void testUpdateOrder() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
         CarOrder order = CarOrderServiceTest.initCarOrder(car, user);
-        order.setId(UUID.randomUUID());
         order.setCarOrderStatus(CarOrderStatus.CLOSED);
 
         Map<String, String> rawBody = Map.of(

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @ToString
 public class User implements Entity {
-    private UUID id;
+    private Long id;
     private UserRole role;
     private String email;
     private String phone;

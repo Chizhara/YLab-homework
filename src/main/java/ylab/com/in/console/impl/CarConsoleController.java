@@ -71,7 +71,7 @@ public class CarConsoleController extends AbsInputConsoleController {
 
     private ConsoleResponse<Car> updateCar(ConsoleRequest request) {
         CarUpdateRequest updateRequest = carMapper.toCarUpdateRequest(request.getRawObject());
-        UUID id = PathVariableExtractor.extractUUID(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
+        Long id = PathVariableExtractor.extractLong(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
         User user = authService.getUser(request);
         if (user.getRole() != UserRole.ADMIN && user.getRole() != UserRole.MANAGER) {
             throw new InvalidActionException("У вас недостаточно прав для совершения действия");
@@ -83,7 +83,7 @@ public class CarConsoleController extends AbsInputConsoleController {
     }
 
     private ConsoleResponse<Car> getCar(ConsoleRequest request) {
-        UUID id = PathVariableExtractor.extractUUID(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
+        Long id = PathVariableExtractor.extractLong(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
         Car car = carService.getCar(id);
         return new ConsoleResponse<>(car);
     }
@@ -95,7 +95,7 @@ public class CarConsoleController extends AbsInputConsoleController {
     }
 
     private ConsoleResponse<Car> deleteCar(ConsoleRequest request) {
-        UUID id = PathVariableExtractor.extractUUID(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
+        Long id = PathVariableExtractor.extractLong(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
         User user = authService.getUser(request);
         if (user.getRole() != UserRole.ADMIN && user.getRole() != UserRole.MANAGER) {
             throw new InvalidActionException("У вас недостаточно прав для совершения действия");

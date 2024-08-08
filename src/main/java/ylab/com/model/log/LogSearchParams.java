@@ -13,6 +13,6 @@ public class LogSearchParams {
     private User user;
     private LogEventType eventType;
     private LogEntityType entityType;
-    private UUID entityId;
+    private Long entityId;
     private Date date;
 }

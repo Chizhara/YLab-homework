@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Builder
 public class Car implements Entity {
-    private UUID id;
+    private Long id;
     private String brand;
     private String model;
     private Year releaseYear;

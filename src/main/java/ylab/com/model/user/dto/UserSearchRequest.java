@@ -1,7 +1,9 @@
-package ylab.com.model.user;
+package ylab.com.model.user.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import ylab.com.model.user.UserOrderType;
+import ylab.com.model.user.UserRole;
 
 import java.util.List;
 

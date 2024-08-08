@@ -8,7 +8,7 @@ import ylab.com.model.console.ConsoleResponse;
 import ylab.com.model.console.HandlerKey;
 import ylab.com.model.console.Method;
 import ylab.com.model.log.Log;
-import ylab.com.model.log.LogSearchRequest;
+import ylab.com.model.log.dto.LogSearchRequest;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserRole;
 import ylab.com.service.AuthService;

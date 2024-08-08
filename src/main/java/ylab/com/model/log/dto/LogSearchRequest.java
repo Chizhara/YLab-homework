@@ -1,7 +1,9 @@
-package ylab.com.model.log;
+package ylab.com.model.log.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import ylab.com.model.log.LogEntityType;
+import ylab.com.model.log.LogEventType;
 
 import java.util.Date;
 import java.util.UUID;
@@ -9,9 +11,9 @@ import java.util.UUID;
 @Data
 @Builder
 public class LogSearchRequest {
-    private UUID userId;
+    private Long userId;
     private LogEventType eventType;
     private LogEntityType entityType;
-    private UUID entityId;
+    private Long entityId;
     private Date date;
 }

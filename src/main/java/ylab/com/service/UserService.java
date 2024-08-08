@@ -5,22 +5,22 @@ import ylab.com.exception.InvalidActionException;
 import ylab.com.exception.NotFoundException;
 import ylab.com.mapper.UserMapperImpl;
 import ylab.com.model.user.User;
-import ylab.com.model.user.UserCreateRequest;
+import ylab.com.model.user.dto.UserCreateRequest;
 import ylab.com.model.user.UserRole;
 import ylab.com.model.user.UserSearchParams;
-import ylab.com.model.user.UserSearchRequest;
-import ylab.com.model.user.UserUpdateRequest;
+import ylab.com.model.user.dto.UserSearchRequest;
+import ylab.com.model.user.dto.UserUpdateRequest;
 import ylab.com.repository.UserRepository;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapperImpl userMapper;
 
-    public User getUser(UUID id) {
+    public User getUser(Long id) {
         return userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(User.class, id));
 
@@ -41,31 +41,31 @@ public class UserService {
         validateLogin(request.getLogin());
         validateEmail(request.getEmail());
         validatePhone(request.getPhone());
-        User user = userMapper.toUser(request);
+        User user = userMapper.toUsers(request);
         user = userRepository.save(user);
         return user;
     }
 
-    public User updateEmployer(UserUpdateRequest request, UUID employerId) {
+    public User updateEmployer(UserUpdateRequest request, Long employerId) {
         validateUpdateRequestCollisions(request);
         User searchedUser = getUser(employerId);
         if(searchedUser.getRole() == UserRole.USER) {
             throw new InvalidActionException("Нельзя обновлять информацию об обычном пользователе");
         }
-        userMapper.toUser(searchedUser, request);
+        userMapper.toUsers(searchedUser, request);
         return userRepository.save(searchedUser);
     }
 
-    public User updateUser(User requester, UserUpdateRequest request, UUID userId) {
-        UUID requesterId = requester.getId();
+    public User updateUser(User requester, UserUpdateRequest request, Long userId) {
+        Long requesterId = requester.getId();
         validateUpdateRequest(requesterId, request, userId);
         User searchedUser = getUser(userId);
-        userMapper.toUser(searchedUser, request);
+        userMapper.toUsers(searchedUser, request);
         return userRepository.save(searchedUser);
     }
 
-    private void validateUpdateRequest(UUID requesterId, UserUpdateRequest request, UUID userId) {
-        if (requesterId != userId) {
+    private void validateUpdateRequest(Long requesterId, UserUpdateRequest request, Long userId) {
+        if (!Objects.equals(requesterId, userId)) {
             throw new InvalidActionException("Нельзя обновлять информацию о другом пользователе");
         }
         validateUpdateRequestCollisions(request);

@@ -9,14 +9,13 @@ import ylab.com.model.car.Car;
 import ylab.com.model.user.User;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @Builder
 public class CarOrder implements Entity {
-    private UUID id;
+    private Long id;
     private User customer;
     private Car car;
     private Instant date;

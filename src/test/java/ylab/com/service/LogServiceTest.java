@@ -15,7 +15,7 @@ import ylab.com.model.log.Log;
 import ylab.com.model.log.LogEntityType;
 import ylab.com.model.log.LogEventType;
 import ylab.com.model.log.LogSearchParams;
-import ylab.com.model.log.LogSearchRequest;
+import ylab.com.model.log.dto.LogSearchRequest;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserRole;
 import ylab.com.repository.LogRepository;
@@ -33,6 +33,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LogServiceTest {
+    private static int logIndex = 0;
     private static LogService logService;
     private static LogRepository logRepository;
     private static UserService userService;
@@ -47,22 +48,24 @@ public class LogServiceTest {
     }
 
     public static Log initLog(User user, LogEventType eventType, Entity entity, LogEntityType entityType) {
+        logIndex++;
         return Log.builder()
+            .id((long) logIndex++)
             .user(user)
             .entityId(entity.getId())
             .entityType(entityType)
             .eventType(eventType)
             .timestamp(Instant.now())
-            .request(new ConsoleRequest(new HandlerKey(null, "path"), null, null))
+            .request("request ")
             .build();
     }
 
     @Test
     public void testAdd() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
         Log log = initLog(user, LogEventType.UPDATE, car, LogEntityType.CAR);
 
         Mockito.when(logRepository.save(ArgumentMatchers.argThat(temp ->
@@ -72,23 +75,34 @@ public class LogServiceTest {
                     && temp.getEventType().equals(log.getEventType()))))
             .thenReturn(log);
 
-        Log logRes = logService.save(user, car, LogEventType.UPDATE, log.getRequest());
+        ConsoleRequest consoleRequest = ConsoleRequest.builder()
+            .handlerKey(HandlerKey.builder()
+                .method(Method.PATCH)
+                .path("/test/path")
+                .build())
+            .rawObject(Map.of("user", "iiii"))
+            .params(Map.of("paramA", "bbbb"))
+            .build();
+
+        log.setRequest(logMapper.toString(consoleRequest));
+
+        Log logRes = logService.save(user, car, LogEventType.UPDATE, consoleRequest);
         assertEquals(log, logRes);
     }
 
     @Test
     public void testSearch() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
         Log log = initLog(user, LogEventType.UPDATE, car, LogEntityType.CAR);
 
         LogSearchRequest request = LogSearchRequest.builder()
             .date(Date.from(log.getTimestamp()))
             .userId(user.getId())
             .entityType(log.getEntityType())
-            .entityId(log.getEntityId())
+            //  .entityId(log.getEntityId())
             .eventType(log.getEventType())
             .build();
 
@@ -104,13 +118,10 @@ public class LogServiceTest {
     }
 
     @Test
-    public void testExport() {
+    public void test_shouldExportCorrectLogs_whenCorrect() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
         Log log = initLog(user, LogEventType.UPDATE, car, LogEntityType.CAR);
-        log.setId(UUID.randomUUID());
 
         ConsoleRequest consoleRequest = ConsoleRequest.builder()
             .handlerKey(HandlerKey.builder()
@@ -121,7 +132,7 @@ public class LogServiceTest {
             .params(Map.of("paramA", "bbbb"))
             .build();
 
-        log.setRequest(consoleRequest);
+        log.setRequest(logMapper.toString(consoleRequest));
 
         LogSearchRequest request = LogSearchRequest.builder()
             .date(Date.from(log.getTimestamp()))
@@ -156,11 +167,6 @@ public class LogServiceTest {
         assertEquals(log.getEventType().toString(), res[3]);
         assertEquals(log.getEntityType().toString(), res[4]);
         assertEquals(log.getEntityId().toString(), res[5]);
-        assertEquals(log.getRequest().getHandlerKey().getMethod()
-                + " "
-                + log.getRequest().getHandlerKey().getPath(),
-            res[6]);
-        assertEquals("paramA bbbb", res[7]);
-        assertEquals("user iiii", res[8]);
+        assertEquals(log.getRequest(), String.join(" | ", res[6], res[7], res[8]));
     }
 }

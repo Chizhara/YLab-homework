@@ -12,7 +12,7 @@ import ylab.com.model.console.HandlerKey;
 import ylab.com.model.console.Method;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserRole;
-import ylab.com.model.user.UserUpdateRequest;
+import ylab.com.model.user.dto.UserUpdateRequest;
 import ylab.com.service.AuthService;
 import ylab.com.service.LogService;
 import ylab.com.service.UserService;
@@ -46,7 +46,7 @@ public class EmployerConsoleControllerTest {
     public void testUpdateEmployer() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
         User admin = UserServiceTest.initUser(UserRole.ADMIN);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "login", user.getLogin(),
@@ -82,7 +82,7 @@ public class EmployerConsoleControllerTest {
     public void testUpdateEmployerByUser() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
         User admin = UserServiceTest.initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "login", user.getLogin(),

@@ -15,12 +15,12 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Builder
 public class Log {
-    private UUID id;
+    private Long id;
     private User user;
     private LogEventType eventType;
     private LogEntityType entityType;
-    private UUID entityId;
-    private ConsoleRequest request;
+    private Long entityId;
+    private String request;
     private Instant timestamp;
 
 }

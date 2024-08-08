@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="0" author="Chizhara">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS develop;
+            CREATE SCHEMA IF NOT EXISTS sys;
+        </sql>
+    </changeSet>
+
+    <changeSet id="1" author="Chizhara">
+        <createSequence sequenceName="user_sequence" schemaName="sys" dataType="bigint" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="2" author="Chizhara">
+        <createTable tableName="users" schemaName="develop">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="login" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)"/>
+            <column name="email" type="varchar(320)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="phone" type="varchar(15)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Chizhara">
+        <createSequence sequenceName="car_sequence" schemaName="sys" dataType="bigint" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="4" author="Chizhara">
+        <createTable tableName="cars" schemaName="develop">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="brand" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_year" type="smallint"/>
+            <column name="price" type="decimal(9, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_description" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Chizhara">
+        <createSequence sequenceName="order_sequence" schemaName="sys" dataType="bigint" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="6" author="Chizhara">
+        <createTable tableName="orders" schemaName="develop">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="customer_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="FK_user_order"
+                             referencedTableSchemaName="develop"
+                             referencedTableName="users"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="car_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="FK_car_order"
+                             referencedTableSchemaName="develop"
+                             referencedTableName="cars"
+                             referencedColumnNames="id"
+                />
+            </column>
+            <column name="date" type="timestamp with time zone"/>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

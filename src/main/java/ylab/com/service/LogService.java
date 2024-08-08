@@ -10,7 +10,7 @@ import ylab.com.model.log.Log;
 import ylab.com.model.log.LogEntityType;
 import ylab.com.model.log.LogEventType;
 import ylab.com.model.log.LogSearchParams;
-import ylab.com.model.log.LogSearchRequest;
+import ylab.com.model.log.dto.LogSearchRequest;
 import ylab.com.model.order.CarOrder;
 import ylab.com.model.user.User;
 import ylab.com.repository.LogRepository;
@@ -67,10 +67,7 @@ public class LogService {
                     .append(log.getEventType()).append(delimiter)
                     .append(log.getEntityType()).append(delimiter)
                     .append(log.getEntityId()).append(delimiter)
-                    .append(log.getRequest().getHandlerKey().getMethod()).append(" ")
-                    .append(log.getRequest().getHandlerKey().getPath()).append(delimiter)
-                    .append(mapToString(log.getRequest().getParams())).append(delimiter)
-                    .append(mapToString(log.getRequest().getRawObject())).append("\n");
+                    .append(log.getRequest());
 
                 bufferedWriter.write(stringBuilder.toString());
             }
@@ -99,8 +96,17 @@ public class LogService {
             .entityType(getEntityType(entity))
             .eventType(eventType)
             .timestamp(Instant.now())
-            .request(request)
+            .request(logMapper.toString(request))
             .build();
+    }
+
+    private String requestToString(ConsoleRequest request) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(request.getHandlerKey().getMethod()).append(" ")
+            .append(request.getHandlerKey().getPath()).append(" | ")
+            .append(mapToString(request.getParams())).append(" | ")
+            .append(mapToString(request.getRawObject()));
+        return stringBuilder.toString();
     }
 
     private LogEntityType getEntityType(Entity entity) {

@@ -11,7 +11,7 @@ import ylab.com.model.console.Method;
 import ylab.com.model.log.LogEventType;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserRole;
-import ylab.com.model.user.UserUpdateRequest;
+import ylab.com.model.user.dto.UserUpdateRequest;
 import ylab.com.service.AuthService;
 import ylab.com.service.LogService;
 import ylab.com.service.UserService;
@@ -47,7 +47,7 @@ public class EmployerConsoleController extends AbsInputConsoleController {
     }
 
     private ConsoleResponse<User> updateEmployer(ConsoleRequest request) {
-        UUID id = PathVariableExtractor.extractUUID(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
+        Long id = PathVariableExtractor.extractLong(request.getHandlerKey().getPath(), BASE_PATH.length() + 1);
         UserUpdateRequest userUpdateRequest = userMapper.toUserUpdateRequest(request.getRawObject());
         User requester = authService.getUser(request);
         if (requester.getRole() != UserRole.ADMIN) {

@@ -10,10 +10,10 @@ import ylab.com.model.console.ConsoleResponse;
 import ylab.com.model.console.HandlerKey;
 import ylab.com.model.console.Method;
 import ylab.com.model.user.User;
-import ylab.com.model.user.UserCreateRequest;
+import ylab.com.model.user.dto.UserCreateRequest;
 import ylab.com.model.user.UserRole;
-import ylab.com.model.user.UserSearchRequest;
-import ylab.com.model.user.UserUpdateRequest;
+import ylab.com.model.user.dto.UserSearchRequest;
+import ylab.com.model.user.dto.UserUpdateRequest;
 import ylab.com.service.AuthService;
 import ylab.com.service.LogService;
 import ylab.com.service.UserService;
@@ -48,7 +48,7 @@ public class UserConsoleControllerTest {
     @Test
     public void testCreateUser() {
         User user = UserServiceTest.initUser(UserRole.ADMIN);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "role", user.getRole().name(),
@@ -78,7 +78,7 @@ public class UserConsoleControllerTest {
     @Test
     public void testUpdateUser() {
         User user = UserServiceTest.initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "login", user.getLogin(),
@@ -114,7 +114,7 @@ public class UserConsoleControllerTest {
     public void testGetUser() {
         User user = UserServiceTest.initUser(UserRole.USER);
         User admin = UserServiceTest.initUser(UserRole.ADMIN);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
         );
@@ -144,7 +144,7 @@ public class UserConsoleControllerTest {
     public void testGetUsers() {
         User user = UserServiceTest.initUser(UserRole.USER);
         User admin = UserServiceTest.initUser(UserRole.ADMIN);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "phone", user.getPhone(),

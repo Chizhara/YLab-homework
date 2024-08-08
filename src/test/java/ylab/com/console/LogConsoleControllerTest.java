@@ -14,7 +14,7 @@ import ylab.com.model.console.Method;
 import ylab.com.model.log.Log;
 import ylab.com.model.log.LogEntityType;
 import ylab.com.model.log.LogEventType;
-import ylab.com.model.log.LogSearchRequest;
+import ylab.com.model.log.dto.LogSearchRequest;
 import ylab.com.model.user.User;
 import ylab.com.model.user.UserRole;
 import ylab.com.service.AuthService;
@@ -50,11 +50,11 @@ public class LogConsoleControllerTest {
     @Test
     public void testGetLogs() {
         User admin = UserServiceTest.initUser(UserRole.ADMIN);
-        admin.setId(UUID.randomUUID());
+        //admin.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
         Log log = LogServiceTest.initLog(admin, LogEventType.UPDATE, car, LogEntityType.CAR);
-        log.setId(UUID.randomUUID());
+        //log.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "date", Date.from(log.getTimestamp()).toInstant().toString(),

@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CarOrderServiceTest {
+    private static int orderIndex = 0;
     private static CarOrderService carOrderService;
     private static CarOrderRepository orderRepository;
     private static CarMapperImpl carMapper;
@@ -43,7 +44,9 @@ public class CarOrderServiceTest {
     }
 
     public static CarOrder initCarOrder(Car car, User customer) {
+        orderIndex++;
         return CarOrder.builder()
+            .id((long) orderIndex)
             .customer(customer)
             .car(car)
             .carOrderStatus(CarOrderStatus.CREATED)
@@ -78,9 +81,9 @@ public class CarOrderServiceTest {
     @Test
     public void testSearchCarOrder() {
         User customer = UserServiceTest.initUser(UserRole.USER);
-        customer.setId(UUID.randomUUID());
+        //customer.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
         CarOrder carOrder = initCarOrder(car, customer);
 
         CarOrderSearchRequest request = CarOrderSearchRequest.builder()
@@ -113,8 +116,6 @@ public class CarOrderServiceTest {
         User customer = UserServiceTest.initUser(UserRole.MANAGER);
         Car car = CarServiceTest.initCar(CarStatus.NEW);
         CarOrder carOrder = initCarOrder(car, customer);
-        UUID id = UUID.randomUUID();
-        carOrder.setId(id);
 
         CarOrder carOrderClone = CarOrder.builder()
             .id(carOrder.getId())
@@ -130,7 +131,7 @@ public class CarOrderServiceTest {
             .carOrderStatus(CarOrderStatus.CLOSED)
             .build();
 
-        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(carOrder));
+        Mockito.when(orderRepository.findById(carOrder.getId())).thenReturn(Optional.of(carOrder));
         Mockito.when(orderRepository.save(carOrderClone)).thenReturn(carOrderClone);
 
         CarOrder orderRes = carOrderService.updateOrder(carOrder.getId(), request);
@@ -148,7 +149,7 @@ public class CarOrderServiceTest {
         Car car = CarServiceTest.initCar(CarStatus.NEW);
         CarOrder carOrder = initCarOrder(car, customer);
         UUID id = UUID.randomUUID();
-        carOrder.setId(id);
+        //carOrder.setId(id);
 
         CarOrder carOrderClone = CarOrder.builder()
             .id(carOrder.getId())
@@ -164,7 +165,7 @@ public class CarOrderServiceTest {
             .carOrderStatus(CarOrderStatus.CANCELED)
             .build();
 
-        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(carOrder));
+        Mockito.when(orderRepository.findById(carOrder.getId())).thenReturn(Optional.of(carOrder));
         Mockito.when(orderRepository.save(carOrderClone)).thenReturn(carOrderClone);
 
         CarOrder orderRes = carOrderService.updateOrder(carOrder.getId(), request);
@@ -181,15 +182,13 @@ public class CarOrderServiceTest {
         User customer = UserServiceTest.initUser(UserRole.MANAGER);
         Car car = CarServiceTest.initCar(CarStatus.NEW);
         CarOrder carOrder = initCarOrder(car, customer);
-        UUID id = UUID.randomUUID();
-        carOrder.setId(id);
         carOrder.setCarOrderStatus(CarOrderStatus.CLOSED);
 
         CarOrderUpdateRequest request = CarOrderUpdateRequest.builder()
             .carOrderStatus(CarOrderStatus.CLOSED)
             .build();
 
-        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(carOrder));
+        Mockito.when(orderRepository.findById(carOrder.getId())).thenReturn(Optional.of(carOrder));
 
         assertThrows(InvalidActionException.class, () -> carOrderService.updateOrder(carOrder.getId(), request));
     }
@@ -199,15 +198,13 @@ public class CarOrderServiceTest {
         User customer = UserServiceTest.initUser(UserRole.MANAGER);
         Car car = CarServiceTest.initCar(CarStatus.NEW);
         CarOrder carOrder = initCarOrder(car, customer);
-        UUID id = UUID.randomUUID();
-        carOrder.setId(id);
         carOrder.setCarOrderStatus(CarOrderStatus.CANCELED);
 
         CarOrderUpdateRequest request = CarOrderUpdateRequest.builder()
             .carOrderStatus(CarOrderStatus.CLOSED)
             .build();
 
-        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(carOrder));
+        Mockito.when(orderRepository.findById(carOrder.getId())).thenReturn(Optional.of(carOrder));
 
         assertThrows(InvalidActionException.class, () -> carOrderService.updateOrder(carOrder.getId(), request));
     }
@@ -217,15 +214,13 @@ public class CarOrderServiceTest {
         User customer = UserServiceTest.initUser(UserRole.MANAGER);
         Car car = CarServiceTest.initCar(CarStatus.NEW);
         CarOrder carOrder = initCarOrder(car, customer);
-        UUID id = UUID.randomUUID();
-        carOrder.setId(id);
         carOrder.setCarOrderStatus(CarOrderStatus.CLOSED);
 
         CarOrderUpdateRequest request = CarOrderUpdateRequest.builder()
             .carOrderStatus(CarOrderStatus.CANCELED)
             .build();
 
-        Mockito.when(orderRepository.findById(id)).thenReturn(Optional.of(carOrder));
+        Mockito.when(orderRepository.findById(carOrder.getId())).thenReturn(Optional.of(carOrder));
 
         assertThrows(InvalidActionException.class, () -> carOrderService.updateOrder(carOrder.getId(), request));
     }

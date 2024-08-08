@@ -1,5 +1,9 @@
 package ylab.com;
 
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import ylab.com.configure.PostgresConnector;
 import ylab.com.in.console.ConsoleListener;
 import ylab.com.in.console.InputConsoleController;
 import ylab.com.in.console.InputConsoleDispatcher;
@@ -15,10 +19,10 @@ import ylab.com.repository.CarOrderRepository;
 import ylab.com.repository.CarRepository;
 import ylab.com.repository.LogRepository;
 import ylab.com.repository.UserRepository;
-import ylab.com.repository.impl.InMemoryCarOrderRepository;
-import ylab.com.repository.impl.InMemoryCarRepository;
-import ylab.com.repository.impl.InMemoryLogRepository;
-import ylab.com.repository.impl.InMemoryUserRepository;
+import ylab.com.repository.impl.CarOrderRepositoryImpl;
+import ylab.com.repository.impl.CarRepositoryImpl;
+import ylab.com.repository.impl.LogRepositoryImpl;
+import ylab.com.repository.impl.UserRepositoryImpl;
 import ylab.com.service.AuthService;
 import ylab.com.service.CarOrderService;
 import ylab.com.service.CarService;
@@ -27,17 +31,20 @@ import ylab.com.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class ContextLoader {
     public static void start() {
-        UserRepository userRepository = new InMemoryUserRepository();
-        CarRepository carRepository = new InMemoryCarRepository();
-        CarOrderRepository carOrderRepository = new InMemoryCarOrderRepository();
-        LogRepository logRepository = new InMemoryLogRepository();
-
         UserMapperImpl userMapper = new UserMapperImpl();
         CarMapperImpl carMapper = new CarMapperImpl();
         LogMapperImpl logMapper = new LogMapperImpl();
+
+        PostgresConnector connector = PostgresConnector.getInstance();
+
+        UserRepository userRepository = new UserRepositoryImpl(connector, userMapper);
+        CarRepository carRepository = new CarRepositoryImpl(connector, carMapper);
+        CarOrderRepository carOrderRepository = new CarOrderRepositoryImpl(connector, carMapper);
+        LogRepository logRepository = new LogRepositoryImpl(connector, logMapper);
 
         UserService userService = new UserService(userRepository, userMapper);
         AuthService authService = new AuthService(userRepository);
@@ -67,5 +74,10 @@ public class ContextLoader {
 
         ConsoleListener consoleListener = new ConsoleListener(inputConsoleDispatcher);
         consoleListener.start();
+
+        Properties properties = new Properties();
+// load properties from classpath
+
+
     }
 }

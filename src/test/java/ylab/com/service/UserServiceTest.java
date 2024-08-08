@@ -6,11 +6,11 @@ import org.mockito.Mockito;
 import ylab.com.exception.InvalidActionException;
 import ylab.com.mapper.UserMapperImpl;
 import ylab.com.model.user.User;
-import ylab.com.model.user.UserCreateRequest;
+import ylab.com.model.user.dto.UserCreateRequest;
 import ylab.com.model.user.UserRole;
 import ylab.com.model.user.UserSearchParams;
-import ylab.com.model.user.UserSearchRequest;
-import ylab.com.model.user.UserUpdateRequest;
+import ylab.com.model.user.dto.UserSearchRequest;
+import ylab.com.model.user.dto.UserUpdateRequest;
 import ylab.com.repository.UserRepository;
 
 import java.util.List;
@@ -34,12 +34,13 @@ public class UserServiceTest {
         userService = new UserService(userRepository, userMapper);
 
         admin = initUser(UserRole.ADMIN);
-        admin.setId(UUID.randomUUID());
+        //admin.setId(UUID.randomUUID());
     }
 
     public static User initUser(UserRole role) {
         userIndex++;
         return User.builder()
+            .id((long) userIndex)
             .email("num_" + userIndex + "@gmail.com")
             .login("user_num_" + userIndex)
             .password("password_" + userIndex)
@@ -51,6 +52,7 @@ public class UserServiceTest {
     @Test
     public void testAddUser() {
         User user = initUser(UserRole.USER);
+        user.setId(null);
         UserCreateRequest request = UserCreateRequest.builder()
             .login(user.getLogin())
             .password(user.getPassword())
@@ -72,7 +74,7 @@ public class UserServiceTest {
     @Test
     public void testUpdateUser() {
         User user = initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         UserUpdateRequest request = UserUpdateRequest.builder()
             .login(user.getLogin())
             .password(user.getPassword())
@@ -94,7 +96,7 @@ public class UserServiceTest {
     @Test
     public void testUpdateManager() {
         User user = initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         UserUpdateRequest request = UserUpdateRequest.builder()
             .login(user.getLogin())
             .password(user.getPassword())
@@ -112,7 +114,7 @@ public class UserServiceTest {
     @Test
     public void testGetUser() {
         User user = initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         Mockito.when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         User userRes = userService.getUser(user.getId());
@@ -127,7 +129,7 @@ public class UserServiceTest {
     @Test
     public void testSearchUsers() {
         User user = initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         UserSearchRequest request = UserSearchRequest.builder()
             .login(user.getLogin())
@@ -156,7 +158,7 @@ public class UserServiceTest {
     @Test
     public void testUserSearchEmployers() {
         User user = initUser(UserRole.USER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         UserSearchRequest request = UserSearchRequest.builder()
             .roles(List.of(UserRole.ADMIN))
@@ -168,7 +170,7 @@ public class UserServiceTest {
     @Test
     public void testAdminSearchEmployers() {
         User user = initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
 
         UserSearchRequest request = UserSearchRequest.builder()
             .login(user.getLogin())

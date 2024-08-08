@@ -49,9 +49,9 @@ public class CarConsoleControllerTest {
     @Test
     public void testAddCar() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "brand", car.getBrand(),
@@ -87,9 +87,9 @@ public class CarConsoleControllerTest {
     @Test
     public void testUpdateCar() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "price", car.getPrice().toString(),
@@ -121,9 +121,9 @@ public class CarConsoleControllerTest {
     @Test
     public void testDelete() {
         User user = UserServiceTest.initUser(UserRole.MANAGER);
-        user.setId(UUID.randomUUID());
+        //user.setId(UUID.randomUUID());
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
         );
@@ -151,7 +151,7 @@ public class CarConsoleControllerTest {
     @Test
     public void testGetCar() {
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
         );
@@ -176,7 +176,7 @@ public class CarConsoleControllerTest {
     @Test
     public void testSearchCars() {
         Car car = CarServiceTest.initCar(CarStatus.NEW);
-        car.setId(UUID.randomUUID());
+        //car.setId(UUID.randomUUID());
 
         Map<String, String> rawBody = Map.of(
             "brand", car.getBrand(),
